@@ -1,18 +1,18 @@
-import datetime
 import pickle
-from ClassPrestamo import *
+from ClassPrestamo import * 
+
 
 class Cliente:
     def __init__(self, nombre, cedula, saldo):
         self.nombre = nombre
         self.cedula = cedula
         self.saldo = saldo
-        self.prestamos = []     #Lista vacía para guardar los préstamos del cliente
-
+        self.prestamos = {}  # Diccionario para guardar los préstamos 
 
     def solicitar_prestamo(self, monto, fecha):
+        """Crea un nuevo préstamo para el cliente y lo agrega al diccionario de préstamos."""
         prestamo = Prestamo(monto, fecha, self)
-        self.prestamos.append(prestamo)         # Agregar el préstamo a la lista de préstamos del cliente
-        self.saldo += monto                     # Actualizar el saldo del cliente sumando el monto del préstamo
+        self.prestamos[self.cedula] = prestamo  
+        self.saldo += monto
         return prestamo
 
