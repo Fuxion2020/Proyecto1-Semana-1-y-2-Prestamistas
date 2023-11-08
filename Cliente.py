@@ -24,3 +24,5 @@ class Cliente:
         self.prestamos.append(prestamo)
         self.saldo += monto
         return prestamo
+    
+    #
