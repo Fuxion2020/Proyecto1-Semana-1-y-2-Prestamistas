@@ -50,6 +50,7 @@ class Administracion:
                 self.pause()
                 
     def mostrar_clientes(self):
+        #Aqui lee la lista de clientes y los va leyendo
         print("----------------------------")
         for i in range(len(self.clientes)):
             print(f"{i+1}. {self.clientes[i].show()}")
@@ -85,7 +86,7 @@ class Administracion:
             #Revisa que el saldo sea un número
             while any(chr.isalpha() for chr in saldo) or not saldo.isdigit():
                 saldo = input("Error! Ingrese un monto ")
-            
+            #tengo que ver como agregar esto
             prestamos = []
 
             nuevo_cliente = Cliente(nombre,cedula,saldo,prestamos)
