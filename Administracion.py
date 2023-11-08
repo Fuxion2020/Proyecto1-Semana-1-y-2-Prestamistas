@@ -82,6 +82,7 @@ class Administracion:
                 cedula = input("Error! Ingrese el DNI del cliente:  ")
 
             saldo = (input("Ingrese el saldo a ingresar del cliente")) 
+            #Revisa que el saldo sea un número
             while any(chr.isalpha() for chr in saldo) or not saldo.isdigit():
                 saldo = input("Error! Ingrese un monto ")
             
