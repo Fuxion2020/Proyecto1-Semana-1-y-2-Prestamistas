@@ -163,5 +163,22 @@ class Administracion:
                 print(f"- Fecha: {prestamo.fecha}")
                 print(f"- Estado: {prestamo.obtener_estado()}")
                 print("<---------------------------->")
-
+                
+   #Estoy probando como hacer que le reste el monto diario diariamente al saldo del cliente      
+    def actualizacion_prestamos(self):
+        for cliente in self.clientes:
+            
+            for prestamo in cliente.prestamos:
+                fecha_inicial = prestamo.fecha
+                fecha_final = prestamo.fecha_final
+                fecha_actual = datetime.date.today()
+                if fecha_actual > fecha_final:
+                    pass
+                else:
+                    cantidad_de_dias = datetime.date.today - fecha_final
+                    cantidad_de_dias = cantidad_de_dias.days * -1
+                    print(Cantidad_de_dias)
+                    fecha_actual = int(datetime.datetime.strftime(fecha_actual, '%d'))
+                    tiempo_restante = cantidad_dias - fecha_actual
+                    print(tiempo_restante)
 
