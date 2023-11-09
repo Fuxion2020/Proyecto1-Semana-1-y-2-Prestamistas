@@ -1,9 +1,11 @@
 import datetime
 
+
 class Prestamo:
     def __init__(self, monto, fecha, cliente):
         self.monto = float(monto)
         self.fecha = fecha
+        self.fecha_final = self.fecha + datetime.timedelta(days=24)
         self.cliente = cliente
         self.monto_pagado = 0     
     
@@ -19,13 +21,12 @@ class Prestamo:
         estado_pago = "Pagado" if self.monto_pagado == self.monto else "Atrasado" if datetime.date.today() > fecha_vencimiento else "Al día"
         return "\n".join(
             [
-                f"- Monto cobrado: {monto_cobrado}",                
+                f"- Monto a pagar en 24 días: {monto_cobrado}",                
                 f"- Monto diario: {monto_diario}",
                 f"- Estado de pago: {estado_pago}",
                 f"- Fecha de vencimiento: {fecha_vencimiento}",
             ]
         )
-
 
 
 
