@@ -3,10 +3,9 @@ from ClassPrestamo import Prestamo
 from ClassPrestamo import * 
 
 class Cliente:
-    def __init__(self, nombre, cedula, saldo, prestamos):
+    def __init__(self, nombre, cedula, prestamos):
         self.nombre = nombre
         self.cedula = cedula
-        self.saldo = float(saldo)
         self.prestamos = []  # lista para guardar los préstamos
         
     def show(self):
@@ -14,7 +13,6 @@ class Cliente:
         return f"""
         Nombre: {self.nombre}
         Cedula: {self.cedula}
-        Saldo: {self.saldo}
         Prestamos: {self.prestamos}
         """
 
@@ -22,7 +20,5 @@ class Cliente:
         """Crea un nuevo préstamo para el cliente y lo agrega a la lista de préstamos."""
         prestamo = Prestamo(monto, fecha, self)
         self.prestamos.append(prestamo)
-        self.saldo += float(monto)
         return prestamo
-    
     
