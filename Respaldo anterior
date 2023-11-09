@@ -1,0 +1,172 @@
+Administacion
+from Cliente import Cliente
+
+class Administracion:
+    #Listas que usará el programa para guardar clientes y préstamos 
+    def __init__(self):
+        #Aqui se guardan los clientes
+        self.clientes = []
+        
+    def menucito(self,opciones):
+        #Es para que se lea la lista "opciones" y las numerice, así en el input solo hay que poner el número de la selcción
+        print("----------------------------")
+        for opcion in range(len(opciones)):
+                print(f"{opcion+1} / {opciones[opcion]}")
+                print("----------------------------")
+    
+                  
+                
+    def menu(self):
+        #Listas que usará el programa para guardar clientes y préstamos 
+        opciones = ["Registrar cliente", "Realizar préstamo", "Revisar corte", "Ver clientes registrados", "Salir"]
+        final = 0
+        while final == 0:
+            print(f"""
+                    HOLA! 
+                BIENVENIDO A
+               "Préstamos C.A"
+
+                """)
+            self.menucito(opciones)
+
+            eleccion = input("Ingrese el número de la opción que desee: ")
+            if eleccion == "1":
+                self.registrar_cliente()
+                self.pause()       
+            elif eleccion == "2":
+                self.registrar_préstamo()
+                self.pause()  
+            elif eleccion == "3":
+                self.revisar_corte()
+                self.pause()      
+            elif eleccion == "4":
+                self.mostrar_clientes()
+                self.pause()   
+            elif eleccion == "5":
+                final = final + 1
+                print("Fin")
+            else:
+                print("Error, seleccione un número válido")
+                self.pause()
+                
+    def mostrar_clientes(self):
+        print("----------------------------")
+        for i in range(len(self.clientes)):
+            print(f"{i+1}. {self.clientes[i].show()}")
+            print("----------------------------")
+    
+    
+    def registrar_cliente(self):
+        #Si se desea añadir más de un cliente
+        qty = (input("Cuántos clientes deseas agregar?: "))
+        #Para no permitir letras ni símbolos
+        while any(chr.isalpha() for chr in qty) or not qty.isdigit():
+            qty = input("Error! Ingrese un numero: ")
+        qty = int(qty)
+        for i in range(qty):
+            #Validacion de nombre
+            nombre=input("Ingrese el nombre del cliente: ")
+            nombre=nombre.lower()
+            nombre=nombre.title()
+            #Para no permitir números ni símbolos
+            while any(chr.isdigit() for chr in nombre) or not nombre.isalpha():
+                nombre = input("Error! Ingrese el nombre del cliente: ")
+                nombre=nombre.lower()
+                nombre=nombre.title()
+                
+            #Validacion de DNI
+            cedula =input("Ingrese el DNI del cliente: ")
+            #Validacion si el DNI tiene solo núemros
+                    
+            while any(chr.isalpha() for chr in cedula) or not cedula.isdigit():
+                cedula = input("Error! Ingrese el DNI del cliente:  ")
+
+            saldo = (input("Ingrese el saldo a ingresar del cliente")) 
+            while any(chr.isalpha() for chr in saldo) or not saldo.isdigit():
+                saldo = input("Error! Ingrese un monto ")
+            
+            prestamos = []
+
+            nuevo_cliente = Cliente(nombre,cedula,saldo,prestamos)
+            self.clientes.append(nuevo_cliente)
+            print(f"Se ha registrado un nuevo cliente: {nombre} ")
+            
+    def pause(self):
+        #Pausa activa que se usan en casi todos los metodos, así la pantalla se ve más organizada al hacerle run
+        print("Toque cualquier botón para volver al menú")
+        pause = input(" ")
+        if pause == "":
+         pass
+        else:
+         pass
+
+Cliente
+    import pickle
+from ClassPrestamo import Prestamo
+from ClassPrestamo import * 
+
+class Cliente:
+    def __init__(self, nombre, cedula, saldo, prestamos):
+        self.nombre = nombre
+        self.cedula = cedula
+        self.saldo = saldo
+        self.prestamos = []  # lista para guardar los préstamos
+        
+    def show(self):
+        #Esto es para que el programa puede leer los clientes que haya, básicamente cuando vayamos hacerle print esto ayuda
+        return f"""
+        Nombre: {self.nombre}
+        Cedula: {self.cedula}
+        Saldo: {self.saldo}
+        Prestamos: {self.prestamos}
+        """
+
+    def solicitar_prestamo(self, monto, fecha):
+        """Crea un nuevo préstamo para el cliente y lo agrega a la lista de préstamos."""
+        prestamo = Prestamo(monto, fecha, self)
+        self.prestamos.append(prestamo)
+        self.saldo += monto
+        return prestamo
+
+    Classprestamo
+
+  import datetime
+
+class Prestamo:
+    def __init__(self, monto, fecha, cliente):
+        self.monto = monto
+        self.fecha = fecha
+        self.cliente = cliente
+        self.monto_pagado = 0     
+
+    def cantidad_dias(self):
+        """Devuelve la cantidad de días que han pasado desde que se solicitó el préstamo."""
+        return (datetime.date.today() - self.fecha).days
+
+    def tasa_interes(self):
+        """Devuelve la tasa de interés del préstamo."""
+        return 0.2
+
+    def calcular_monto_diario(self):
+        """Devuelve el monto diario que se debe pagar por el préstamo."""
+        return self.monto / 24
+
+    def calcular_monto_total(self):
+        """Devuelve el monto total que se debe pagar por el préstamo, incluyendo el interés."""
+        return self.monto * (1 + self.tasa_interes())
+
+    def registrar_pago(self, monto):
+        """Registra un pago por el préstamo y actualiza el monto pagado."""
+        self.monto_pagado += monto
+
+    def obtener_estado(self):
+        """Devuelve un diccionario con el estado del préstamo, incluyendo el monto pendiente, el monto diario y la cantidad de días restantes."""
+        monto_pendiente = self.monto - self.monto_pagado
+        monto_diario = self.calcular_monto_diario()
+        cantidad_dias_restantes = (self.cantidad_dias() - self.monto_pagado / monto_diario)
+        return {
+            "- Monto pendiente": monto_pendiente,
+            "- Monto diario": monto_diario,
+            "- Cantidad de dias restantes": cantidad_dias_restantes,
+        }
+
