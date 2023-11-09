@@ -6,7 +6,7 @@ class Cliente:
     def __init__(self, nombre, cedula, saldo, prestamos):
         self.nombre = nombre
         self.cedula = cedula
-        self.saldo = saldo
+        self.saldo = float(saldo)
         self.prestamos = []  # lista para guardar los préstamos
         
     def show(self):
@@ -22,7 +22,7 @@ class Cliente:
         """Crea un nuevo préstamo para el cliente y lo agrega a la lista de préstamos."""
         prestamo = Prestamo(monto, fecha, self)
         self.prestamos.append(prestamo)
-        self.saldo += monto
+        self.saldo += float(monto)
         return prestamo
     
     
