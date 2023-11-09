@@ -1,4 +1,4 @@
-
+from ClassPrestamo import Prestamo
 from Cliente import *
 import datetime
 
@@ -25,10 +25,11 @@ class Administracion:
                   
                 
     def menu(self):
-        #Listas que usará el programa para guardar clientes y préstamos 
-        opciones = ["Registrar cliente", "Realizar préstamo", "Revisar corte", "Ver clientes registrados", "Salir"]
+        #Listas que usará el programa para las opciones del menu
+        opciones = ["Registrar cliente", "Registrar préstamo", "Revisar corte", "Ver clientes registrados", "Salir"]
         final = 0
         while final == 0:
+            
             print(f"""
                     HOLA! 
                 BIENVENIDO A
@@ -89,15 +90,10 @@ class Administracion:
                     
             while any(chr.isalpha() for chr in cedula) or not cedula.isdigit():
                 cedula = input("Error! Ingrese el DNI del cliente:  ")
-
-            saldo = (input("Ingrese el saldo a ingresar del cliente: ")) 
-            #Revisa que el saldo sea un número
-            while any(chr.isalpha() for chr in saldo) or not saldo.isdigit():
-                saldo = input("Error! Ingrese un monto ")
             #tengo que ver como agregar esto
             prestamos = []   #////// REVISAR
 
-            nuevo_cliente = Cliente(nombre,cedula,saldo,prestamos)
+            nuevo_cliente = Cliente(nombre,cedula,prestamos)
             self.clientes.append(nuevo_cliente)
             print(f"Se ha registrado un nuevo cliente: {nombre} ")
             
@@ -114,39 +110,43 @@ class Administracion:
 
     def registrar_préstamo(self):
         #Pide los datos del cliente y del préstamo
-        nombre = input("Ingrese el nombre del cliente: ").lower().title()
-        #Para no permitir números ni símbolos
-        while any(chr.isdigit() for chr in nombre) or not nombre.isalpha():
-            nombre = input("Error! Ingrese el nombre del cliente: ").lower().title()
-            
         #Validacion de DNI
         cedula =input("Ingrese el DNI del cliente: ")
         #Validacion si el DNI tiene solo números          
         while any(chr.isalpha() for chr in cedula) or not cedula.isdigit():
             cedula = input("Error! Ingrese el DNI del cliente:  ")
+        existencia = 0
+        if True:
+            for dni in self.clientes:
+             if dni.cedula == cedula:
+                 nombre = dni.nombre
+                 existencia = existencia + 1
+             else:
+                 print("Esta cedula no está registrada")
+             
+        if existencia > 0:        
+            #Validación del monto
+            monto = input("Ingrese el monto del préstamo: ")
+            try:
+                if float(monto) < 0:
+                    raise ValueError
+            except ValueError:
+                monto = input("Error! Ingrese el monto del prestamo: ")
+            while any(chr.isalpha() for chr in monto) or not monto.isdigit():
+                monto = input("Error! Ingrese un monto ")
 
-        #Validación del monto
-        monto = input("Ingrese el monto del préstamo: ")
-        try:
-            if float(monto) < 0:
-                raise ValueError
-        except ValueError:
-            monto = input("Error! Ingrese el monto del prestamo: ")
-        while any(chr.isalpha() for chr in monto) or not monto.isdigit():
-            monto = input("Error! Ingrese un monto ")
-
-        fecha = datetime.date.today()
-        #Busca al cliente en la lista de clientes
-        cliente = self.buscar_cliente(nombre, cedula)
-        #Si el cliente existe, le crea un nuevo préstamo y lo agrega a la lista de préstamos
-        if cliente:
-            prestamo = cliente.solicitar_prestamo(monto,fecha)
-            print(f"<<<Se ha realizado el préstamo de {monto} a {nombre} con éxito.>>>>")
-            print("Estado del prestamo:")
-            print(prestamo.obtener_estado())
-        #Si el cliente no existe, le avisa al usuario
-        else:
-            print(f"No se encontró al cliente con nombre {nombre} y cédula {cedula}.")
+            fecha = datetime.date.today()
+            #Busca al cliente en la lista de clientes
+            cliente = self.buscar_cliente(nombre, cedula)
+            #Si el cliente existe, le crea un nuevo préstamo y lo agrega a la lista de préstamos
+            if cliente:
+                prestamo = cliente.solicitar_prestamo(monto,fecha)
+                print(f"<<<Se ha realizado el préstamo de {monto} a {nombre} con éxito.>>>>")
+                print("Estado del prestamo:")
+                print(prestamo.obtener_estado())
+            #Si el cliente no existe, le avisa al usuario
+            else:
+                print(f"No se encontró al cliente con cédula {cedula}.")
 
 
   # ////// REVISAR NO IMPRIME BIEN ////////
@@ -155,30 +155,12 @@ class Administracion:
         for cliente in self.clientes:
             print(f"Cliente: {cliente.nombre}")
             print(f"Cédula: {cliente.cedula}")
-            print(f"Saldo: {cliente.saldo}")
             print(f"Prestamos:")
             #Recorre la lista de préstamos de cada cliente y muestra el estado de cada uno
             for prestamo in cliente.prestamos:
                 print(f"- Monto: {prestamo.monto}")
                 print(f"- Fecha: {prestamo.fecha}")
-                print(f"- Estado: {prestamo.obtener_estado()}")
+                print(f"""- Estado: 
+                {prestamo.obtener_estado()}""")
                 print("<---------------------------->")
-                
-   #Estoy probando como hacer que le reste el monto diario diariamente al saldo del cliente      
-    def actualizacion_prestamos(self):
-        for cliente in self.clientes:
-            
-            for prestamo in cliente.prestamos:
-                fecha_inicial = prestamo.fecha
-                fecha_final = prestamo.fecha_final
-                fecha_actual = datetime.date.today()
-                if fecha_actual > fecha_final:
-                    pass
-                else:
-                    cantidad_de_dias = datetime.date.today - fecha_final
-                    cantidad_de_dias = cantidad_de_dias.days * -1
-                    print(Cantidad_de_dias)
-                    fecha_actual = int(datetime.datetime.strftime(fecha_actual, '%d'))
-                    tiempo_restante = cantidad_dias - fecha_actual
-                    print(tiempo_restante)
-
+       
