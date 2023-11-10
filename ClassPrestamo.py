@@ -21,7 +21,7 @@ class Prestamo:
         estado_pago = "Pagado" if self.monto_pagado == self.monto else "Atrasado" if datetime.date.today() > fecha_vencimiento else "Al día"
         return "\n".join(
             [
-                f"- Monto a pagar en 24 días: {monto_cobrado}",                
+                f"- Monto a pagar en 24 días: {round((monto_cobrado),2)}",                
                 f"- Monto diario: {monto_diario}",
                 f"- Estado de pago: {estado_pago}",
                 f"- Fecha de vencimiento: {fecha_vencimiento}",
