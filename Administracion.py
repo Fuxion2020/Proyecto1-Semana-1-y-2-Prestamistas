@@ -1,4 +1,4 @@
-from ClassPrestamo import Prestamo
+from ClassPrestamo import *
 from Cliente import *
 import datetime
 
