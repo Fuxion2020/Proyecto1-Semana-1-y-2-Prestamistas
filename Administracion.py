@@ -59,15 +59,6 @@ class Administracion:
                 self.pause()
             
 
-
-    def mostrar_clientes(self):
-        #Aqui lee la lista de clientes y los va leyendo
-        print("----------------------------")
-        for i in range(len(self.clientes)):
-            print(f"{i+1}. {self.clientes[i].show()}")
-            print("----------------------------")
-    
-
     
     def registrar_cliente(self):
         #Si se desea añadir más de un cliente
@@ -128,18 +119,22 @@ class Administracion:
                  existencia = existencia + 1
              else:
                  print("Esta cedula no está registrada")
-             
         if existencia > 0:        
             #Validación del monto
-            monto = input("Ingrese el monto del préstamo: ")
-            try:
-                if float(monto) < 0:
-                    raise ValueError
-            except ValueError:
-                monto = input("Error! Ingrese el monto del prestamo: ")
-            while any(chr.isalpha() for chr in monto) or not monto.isdigit():
-                monto = input("Error! Ingrese un monto ")
-
+            while True:
+                try:
+                    monto = input("Ingrese el monto del préstamo: ")
+                    if monto == " ":
+                        raise ValueError
+                    if not monto.isdigit():
+                        raise ValueError
+                    monto = float(monto)
+                    if monto <= 0:
+                        raise ValueError
+                    break
+                except ValueError:
+                    print("Error! El monto tiene que ser un número mayor a 0 y no puede haber letras.")
+                    
             fecha = datetime.date.today()
             #Busca al cliente en la lista de clientes
             cliente = self.buscar_cliente(nombre, cedula)
@@ -162,7 +157,7 @@ class Administracion:
             print(f"Cédula: {cliente.cedula}")
             #Recorre la lista de préstamos de cada cliente 
             for prestamo in cliente.prestamos:
-                fecha_vencimiento = prestamo.fecha + datetime.timedelta(days=24)
+                fecha_vencimiento = prestamo.fecha_final
                 #Pide a la compañía que ingrese la fecha que desea consultar
                 fecha_consulta = input("Ingrese la fecha que desea consultar (xx/bb/yyyy): ")
                 # Convertir la fecha ingresada a un objeto datetime
@@ -187,7 +182,14 @@ class Administracion:
                 except ValueError:
                     #Si la fecha ingresada no tiene el formato correcto, muestra un mensaje de error
                     print("La fecha ingresada no tiene el formato correcto. Debe ser xx/bb/yyyy.")
-                    print("<---------------------------->")
-
+ 
+ 
+    def mostrar_clientes(self):
+        #Aqui lee la lista de clientes y los va leyendo
+        print("----------------------------")
+        for i in range(len(self.clientes)):
+            print(f"{i+1}. {self.clientes[i].show()}")
+            print("----------------------------")
+    
 
        
