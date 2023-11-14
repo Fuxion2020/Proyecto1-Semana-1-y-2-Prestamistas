@@ -13,7 +13,6 @@ class Cliente:
         return f"""
         Nombre: {self.nombre}
         Cedula: {self.cedula}
-        Prestamos: {self.prestamos}
         """
 
     def solicitar_prestamo(self, monto, fecha):
@@ -21,4 +20,3 @@ class Cliente:
         prestamo = Prestamo(monto, fecha, self)
         self.prestamos.append(prestamo)
         return prestamo
-    
