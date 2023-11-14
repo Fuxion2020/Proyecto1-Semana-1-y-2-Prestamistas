@@ -1,5 +1,6 @@
 from ClassPrestamo import *
 from Cliente import *
+import pickle
 import datetime
 
 class Administracion:
@@ -26,7 +27,7 @@ class Administracion:
                 
     def menu(self):
         #Listas que usará el programa para las opciones del menu
-        opciones = ["Registrar cliente", "Registrar préstamo", "Revisar corte", "Ver clientes registrados", "Salir"]
+        opciones = ["Registrar cliente", "Registrar préstamo", "Revisar corte", "Ver clientes registrados", "Salir","Guardar lista de clientes", "Abrir lista de clientes"]
         final = 0
         while final == 0:
             
@@ -54,6 +55,12 @@ class Administracion:
             elif eleccion == "5":
                 final = final + 1
                 print("Fin")
+            elif eleccion == "6":
+                self.guardar_listas()
+                self.pause()
+            elif eleccion == "7":
+                self.leer_pickle()
+                self.pause()
             else:
                 print("Error, seleccione un número válido")
                 self.pause()
@@ -114,11 +121,10 @@ class Administracion:
         existencia = 0
         if True:
             for dni in self.clientes:
-             if dni.cedula == cedula:
-                 nombre = dni.nombre
-                 existencia = existencia + 1
-             else:
-                 print("Esta cedula no está registrada")
+                if dni.cedula == cedula:
+                    nombre = dni.nombre
+                    existencia = existencia + 1
+        
         if existencia > 0:        
             #Validación del monto
             while True:
@@ -189,6 +195,25 @@ class Administracion:
         print("----------------------------")
         for i in range(len(self.clientes)):
             print(f"{i+1}. {self.clientes[i].show()}")
+        print("Prestamos activos")
+        for cliente in self.clientes:  
+            for prestamo in cliente.prestamos:
+                    print({prestamo.show()})
             print("----------------------------")
     
+    def guardar_listas(self):
+      Lista_binaria = open("Archivolista","wb")
+      pickle.dump(self.clientes, Lista_binaria)
+      Lista_binaria.close()
 
+    def leer_pickle(self):
+        Listaarchivada = open("Archivolista", "rb")   
+        
+        Lista_binaria = pickle.load(Listaarchivada)
+        for i in range(len(Lista_binaria)):
+            print(f"{i+1}. {Lista_binaria[i].show()}")
+        print("Prestamos de lista")
+        for cliente in Lista_binaria:  
+            for prestamo in cliente.prestamos:
+                    print({prestamo.show()})
+            print("----------------------------")   
