@@ -217,3 +217,5 @@ class Administracion:
             for prestamo in cliente.prestamos:
                     print({prestamo.show()})
             print("----------------------------")   
+
+            
