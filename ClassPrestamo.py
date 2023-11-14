@@ -13,6 +13,16 @@ class Prestamo:
         """Devuelve la tasa de interés del préstamo."""
         return 0.2
     
+    def show(self):
+        #Esto es para que el programa puede leer los clientes que haya, básicamente cuando vayamos hacerle print esto ayuda
+        return f"""
+        Cliente: {self.cliente.show()}
+        Monto: {self.monto}
+        Fecha Inicio: {self.fecha}
+        Fecha final: {self.fecha_final}
+        {self.monto_pagado}
+        """
+        
     def obtener_estado(self):
         """Devuelve un diccionario con el estado del préstamo, el monto cobrado, el monto diario, el estado de pago y la fecha de vencimiento."""
         monto_cobrado = self.monto * (1 + self.tasa_interes())
@@ -21,12 +31,16 @@ class Prestamo:
         estado_pago = "Pagado" if self.monto_pagado == self.monto else "Atrasado" if datetime.date.today() > fecha_vencimiento else "Al día"
         return "\n".join(
             [
-                f"- Monto a pagar en 24 días: {round((monto_cobrado),2)}",                
+                f"- Monto a pagar en 24 días: {monto_cobrado}",                
                 f"- Monto diario: {monto_diario}",
                 f"- Estado de pago: {estado_pago}",
                 f"- Fecha de vencimiento: {fecha_vencimiento}",
             ]
         )
+
+
+
+
 
 
 
