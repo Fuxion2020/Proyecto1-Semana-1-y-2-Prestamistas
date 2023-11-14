@@ -44,7 +44,7 @@ class Administracion:
                 self.registrar_cliente()
                 self.pause()       
             elif eleccion == "2":
-                self.registrar_préstamo()
+                self.registrar_prestamo()
                 self.pause()  
             elif eleccion == "3":
                 self.revisar_corte()
@@ -111,7 +111,7 @@ class Administracion:
     
 
 
-    def registrar_préstamo(self):
+    def registrar_prestamo(self):
         #Pide los datos del cliente y del préstamo
         #Validacion de DNI
         cedula =input("Ingrese el DNI del cliente: ")
@@ -218,4 +218,3 @@ class Administracion:
                     print({prestamo.show()})
             print("----------------------------")   
 
-            
