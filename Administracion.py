@@ -27,7 +27,7 @@ class Administracion:
                 
     def menu(self):
         #Listas que usará el programa para las opciones del menu
-        opciones = ["Registrar cliente", "Registrar préstamo", "Revisar corte", "Ver clientes registrados", "Salir","Guardar lista de clientes", "Abrir lista de clientes"]
+        opciones = ["Registrar cliente", "Registrar préstamo", "Revisar corte", "Ver clientes registrados", "Salir"]
         final = 0
         while final == 0:
             
@@ -55,12 +55,6 @@ class Administracion:
             elif eleccion == "5":
                 final = final + 1
                 print("Fin")
-            elif eleccion == "6":
-                self.guardar_listas()
-                self.pause()
-            elif eleccion == "7":
-                self.leer_pickle()
-                self.pause()
             else:
                 print("Error, seleccione un número válido")
                 self.pause()
@@ -76,7 +70,7 @@ class Administracion:
         qty = int(qty)
         for i in range(qty):
             #Validacion de nombre
-            nombre=input("Ingrese el nombre del cliente: ")
+            nombre=input("- Ingrese el nombre del cliente: ")
             nombre=nombre.lower()
             nombre=nombre.title()
             #Para no permitir números ni símbolos
@@ -86,17 +80,16 @@ class Administracion:
                 nombre=nombre.title()
                 
             #Validacion de DNI
-            cedula =input("Ingrese el DNI del cliente: ")
+            cedula =input("- Ingrese el DNI del cliente: ")
             #Validacion si el DNI tiene solo números
                     
             while any(chr.isalpha() for chr in cedula) or not cedula.isdigit():
                 cedula = input("Error! Ingrese el DNI del cliente:  ")
-            #tengo que ver como agregar esto
-            prestamos = []   #////// REVISAR
 
+            prestamos = []   
             nuevo_cliente = Cliente(nombre,cedula,prestamos)
             self.clientes.append(nuevo_cliente)
-            print(f"Se ha registrado un nuevo cliente: {nombre} ")
+            print(f">> Se ha registrado un nuevo cliente: {nombre} ")
 
 
 
@@ -124,7 +117,6 @@ class Administracion:
                 if dni.cedula == cedula:
                     nombre = dni.nombre
                     existencia = existencia + 1
-        
         if existencia > 0:        
             #Validación del monto
             while True:
@@ -165,7 +157,7 @@ class Administracion:
             for prestamo in cliente.prestamos:
                 fecha_vencimiento = prestamo.fecha_final
                 #Pide a la compañía que ingrese la fecha que desea consultar
-                fecha_consulta = input("Ingrese la fecha que desea consultar (xx/bb/yyyy): ")
+                fecha_consulta = input("Ingrese la fecha que desea consultar el corte (xx/bb/yyyy): ")
                 # Convertir la fecha ingresada a un objeto datetime
                 try:
                     fecha_consulta = datetime.datetime.strptime(fecha_consulta, "%d/%m/%Y")
@@ -190,31 +182,27 @@ class Administracion:
                     print("La fecha ingresada no tiene el formato correcto. Debe ser xx/bb/yyyy.")
  
  
-    def mostrar_clientes(self):
-        #Aqui lee la lista de clientes y los va leyendo
-        print("----------------------------")
-        for i in range(len(self.clientes)):
-            print(f"{i+1}. {self.clientes[i].show()}")
-        print("Prestamos activos")
-        for cliente in self.clientes:  
-            for prestamo in cliente.prestamos:
-                    print({prestamo.show()})
-            print("----------------------------")
-    
-    def guardar_listas(self):
-      Lista_binaria = open("Archivolista","wb")
-      pickle.dump(self.clientes, Lista_binaria)
-      Lista_binaria.close()
 
-    def leer_pickle(self):
-        Listaarchivada = open("Archivolista", "rb")   
-        
-        Lista_binaria = pickle.load(Listaarchivada)
-        for i in range(len(Lista_binaria)):
-            print(f"{i+1}. {Lista_binaria[i].show()}")
-        print("Prestamos de lista")
-        for cliente in Lista_binaria:  
-            for prestamo in cliente.prestamos:
-                    print({prestamo.show()})
-            print("----------------------------")   
+    def mostrar_clientes(self):
+        with open("Archivolista", "wb") as Lista_binaria:
+            pickle.dump(self.clientes, Lista_binaria)
+
+        with open("Archivolista", "rb") as Listaarchivada:
+            Lista_binaria = pickle.load(Listaarchivada)
+            # Aqui crea un diccionario vacío para guardar los clientes
+            clientes_dict = {}
+            # Aqui recorre la lista de clientes y los agrega al diccionario usando su nombre como clave
+            for cliente in Lista_binaria:
+                clientes_dict[cliente.nombre] = cliente
+            # Aqui muestra el diccionario de clientes
+            for nombre, cliente in clientes_dict.items():
+                # Format para mostrar el nombre y la cédula del cliente
+                print(" Cliente: {}     Cédula: {}".format(nombre, cliente.cedula))
+                # Format para mostrar los datos de los préstamos del cliente
+                for prestamo in cliente.prestamos:
+                    print("Monto del préstamo: {:.2f}, Fecha: {}".format(prestamo.monto, prestamo.fecha ))
+                print("<<<<<--------------->>>>>")
+
+
+    
 
