@@ -148,6 +148,7 @@ class Administracion:
 
 
 
+ 
     def revisar_corte(self):
         #Recorre la lista de clientes 
         for cliente in self.clientes:
@@ -158,30 +159,39 @@ class Administracion:
                 fecha_vencimiento = prestamo.fecha_final
                 #Pide a la compañía que ingrese la fecha que desea consultar
                 fecha_consulta = input("Ingrese la fecha que desea consultar el corte (xx/bb/yyyy): ")
-                # Convertir la fecha ingresada a un objeto datetime
-                try:
-                    fecha_consulta = datetime.datetime.strptime(fecha_consulta, "%d/%m/%Y")
-                    #Convierte el objeto datetime.datetime a un objeto datetime.date
-                    fecha_consulta = fecha_consulta.date()
-                    #Valida que la fecha ingresada esté dentro del rango de los 24 días desde la fecha del préstamo
-                    if prestamo.fecha <= fecha_consulta <= fecha_vencimiento:
-                        dias_transcurridos = (fecha_consulta - prestamo.fecha).days
-                        monto_cobrado = prestamo.monto * (1 + prestamo.tasa_interes())
-                        monto_diario = (monto_cobrado / 24)
-                        total_cobrado = monto_diario * dias_transcurridos
-                        total_pendiente = monto_cobrado - total_cobrado
+                # Crea una variable para controlar el bucle
+                fecha_valida = False
+                # Mientras la fecha no sea válida, se repite el bucle
+                while not fecha_valida:
+                    # Intenta convertir la fecha ingresada a un objeto datetime
+                    try:
+                        fecha_consulta = datetime.datetime.strptime(fecha_consulta, "%d/%m/%Y")
+                        #Convierte el objeto datetime.datetime a un objeto datetime.date
+                        fecha_consulta = fecha_consulta.date()
+                        #Valida que la fecha ingresada esté dentro del rango de los 24 días desde la fecha del préstamo
+                        if prestamo.fecha <= fecha_consulta <= fecha_vencimiento:
+                            dias_transcurridos = (fecha_consulta - prestamo.fecha).days
+                            monto_cobrado = prestamo.monto * (1 + prestamo.tasa_interes())
+                            monto_diario = (monto_cobrado / 24)
+                            total_cobrado = monto_diario * dias_transcurridos
+                            total_pendiente = monto_cobrado - total_cobrado
     
-                        print(f"- Total cobrado: {round((total_cobrado),2)}")
-                        print(f"- Total pendiente: {round((total_pendiente),2)}")
-                        print("<---------------------------->")
-                    else:
-                        #Si la fecha ingresada no está dentro del rango, muestra un mensaje de error
-                        print("La fecha ingresada no es válida. Debe estar dentro de los 24 días desde la fecha del préstamo.")
-                except ValueError:
-                    #Si la fecha ingresada no tiene el formato correcto, muestra un mensaje de error
-                    print("La fecha ingresada no tiene el formato correcto. Debe ser xx/bb/yyyy.")
- 
- 
+                            print(f"- Total cobrado: {round((total_cobrado),2)}")
+                            print(f"- Total pendiente: {round((total_pendiente),2)}")
+                            print("<---------------------------->")
+                            # Si la fecha es válida, cambia el valor de la variable a True para salir del bucle
+                            fecha_valida = True
+                        else:
+                            #Si la fecha ingresada no está dentro del rango, muestra un mensaje de error y pide otra fecha
+                            print("La fecha ingresada no es válida. Debe estar dentro de los 24 días desde la fecha del préstamo.")
+                            fecha_consulta = input("Ingrese la fecha que desea consultar el corte (xx/bb/yyyy): ")
+                    except ValueError:
+                        #Si la fecha ingresada no tiene el formato correcto, muestra un mensaje de error y pide otra fecha
+                        print("La fecha ingresada no tiene el formato correcto. Debe ser xx/bb/yyyy.")
+                        fecha_consulta = input("Ingrese otra fecha que desea consultar el corte (xx/bb/yyyy): ")
+
+
+
 
     def mostrar_clientes(self):
         with open("Archivolista", "wb") as Lista_binaria:
